@@ -1,15 +1,15 @@
 [submodule "atmos_cubed_sphere"]
   path = atmos_cubed_sphere
   url = https://github.com/MicroTed/GFDL_atmos_cubed_sphere.git
-  branch = feature/ideal-new-tm
+  branch = ideal-periodic
 [submodule "ccpp/framework"]
   path = ccpp/framework
   url = https://github.com/NCAR/ccpp-framework
   branch = main
 [submodule "ccpp/physics"]
   path = ccpp/physics
-  url = https://github.com/MicroTed/ccpp-physics
-  branch = ufsdev-nssl3m
+  url = https://github.com/ufs-community/ccpp-physics
+  branch = ufs/dev
 [submodule "upp"]
   path = upp
   url = https://github.com/NOAA-EMC/UPP
