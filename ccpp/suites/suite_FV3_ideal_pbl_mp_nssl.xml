@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<suite name="FV3_RRFS_v1nssl_idealpbl" lib="ccppphys" ver="5">
+<suite name="FV3_ideal_pbl_mp_nssl" lib="ccppphys" ver="5">
   <!-- <init></init> -->
   <group name="time_vary">
     <subcycle loop="1">
@@ -15,9 +15,12 @@
       <scheme>GFS_suite_interstitial_rad_reset</scheme>
       <scheme>sgscloud_radpre</scheme>
       <scheme>GFS_rrtmg_pre</scheme>
+      <scheme>GFS_radiation_surface</scheme>
       <scheme>rad_sw_pre</scheme>
+      <scheme>rrtmg_sw</scheme>
       <scheme>rrtmg_sw_post</scheme>
       <scheme>rrtmg_lw_pre</scheme>
+      <scheme>rrtmg_lw</scheme>
       <scheme>sgscloud_radpost</scheme>
       <scheme>rrtmg_lw_post</scheme>
       <scheme>GFS_rrtmg_post</scheme>
@@ -40,8 +43,9 @@
     <!-- Surface iteration loop -->
     <subcycle loop="2">
 <!-- 
- -->
       <scheme>sfc_diff</scheme>
+ -->
+      <scheme>mynnsfc_wrapper</scheme>
       <scheme>GFS_surface_loop_control_part1</scheme>
       <scheme>sfc_nst_pre</scheme>
       <scheme>sfc_nst</scheme>
@@ -64,9 +68,9 @@
       <scheme>GFS_GWD_generic_post</scheme>
  -->
       <scheme>mynnedmf_wrapper</scheme>
+<!-- 
       <scheme>rayleigh_damp</scheme>
       <scheme>GFS_suite_stateout_update</scheme>
-<!-- 
       <scheme>ozphys_2015</scheme>
       <scheme>h2ophys</scheme>
  -->
@@ -77,6 +81,7 @@
       <scheme>mp_nssl</scheme>
       <scheme>GFS_MP_generic_post</scheme>
       <scheme>maximum_hourly_diagnostics</scheme>
+      <scheme>GFS_physics_post</scheme>
     </subcycle>
   </group>
   <group name="stochastics">
