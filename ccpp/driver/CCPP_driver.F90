@@ -187,10 +187,14 @@ module CCPP_driver
         !--- Call CCPP radiation/physics/stochastics group
         call ccpp_physics_run(cdata_block(nb,ntX), suite_name=trim(ccpp_suite), group_name=trim(step), ierr=ierr2)
         if (ierr2/=0) then
+           if ( ierr2 == 86 .and. trim(step)=="radiation" ) then
+             ierr = ierr2
+           else
            write(0,'(2a,3(a,i4),a)') "An error occurred in ccpp_physics_run for group ", trim(step), &
                                      ", block ", nb, " and thread ", nt, " (ntX=", ntX, "):"
            write(0,'(a)') trim(cdata_block(nb,ntX)%errmsg)
            ierr = ierr + ierr2
+           endif
         end if
       end do
 !$OMP end do

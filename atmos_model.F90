@@ -357,6 +357,8 @@ subroutine update_atmos_radiation_physics (Atmos)
 
       call mpp_clock_end(setupClock)
 
+      if ( GFS_control%do_radiation ) then
+      
       if (mpp_pe() == mpp_root_pe() .and. debug) write(6,*) "radiation driver"
 
 !--- execute the atmospheric radiation subcomponent (RRTM)
@@ -365,7 +367,14 @@ subroutine update_atmos_radiation_physics (Atmos)
       ! Performance improvement. Only enter if it is time to call the radiation physics.
       if (GFS_control%lsswr .or. GFS_control%lslwr) then
         call CCPP_step (step="radiation", nblks=Atm_block%nblks, ierr=ierr)
-        if (ierr/=0)  call mpp_error(FATAL, 'Call to CCPP radiation step failed')
+        if (ierr/=0) then
+          if ( ierr == 86 ) then
+            write(6,*) 'No radiation group in suite, so turning off radiation calls'
+            GFS_control%do_radiation = .false.
+          else
+            call mpp_error(FATAL, 'Call to CCPP radiation step failed')
+          endif
+        endif
       endif
       call mpp_clock_end(radClock)
 
@@ -373,6 +382,8 @@ subroutine update_atmos_radiation_physics (Atmos)
         if (mpp_pe() == mpp_root_pe()) print *,'RADIATION STEP  ', GFS_control%kdt, GFS_control%fhour
         call fv3atm_checksum(GFS_control, GFS_data, Atm_block)
       endif
+      
+      endif ! do_radiation
 
       if (mpp_pe() == mpp_root_pe() .and. debug) write(6,*) "physics driver"
 
