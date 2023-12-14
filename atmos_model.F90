@@ -369,7 +369,10 @@ subroutine update_atmos_radiation_physics (Atmos)
         call CCPP_step (step="radiation", nblks=Atm_block%nblks, ierr=ierr)
         if (ierr/=0) then
           if ( ierr == 86 ) then
-            write(6,*) 'No radiation group in suite, so turning off radiation calls'
+            if (mpp_pe() == mpp_root_pe() ) then
+               write(6,*) 'No radiation group in suite, so turning off radiation calls'
+               write(0,*) 'No radiation group in suite, so turning off radiation calls'
+            endif
             GFS_control%do_radiation = .false.
           else
             call mpp_error(FATAL, 'Call to CCPP radiation step failed')
